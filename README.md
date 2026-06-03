@@ -20,4 +20,4 @@
 
 1. Клонируйте репозиторий:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/weather-cli.git
+   git clone https://github.com/Latecomer-deadline/weather-cli.git
