@@ -1,61 +1,15 @@
-npm install
+import requests
 
-const https = require('https');
-const readline = require('readline');
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
+# Ваши данные
+city = "Moscow"  # Можно менять на любой город
+api_key = "139118da9fba9df54951c10e228675f4"
 
-const API_KEY = 'YOUR_API_KEY_HERE'; // Замените на ваш ключ
+# Формируем запрос
+url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&units=metric&appid={api_key}"
 
-function getWeather(city) {
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${API_KEY}&units=metric&lang=ru`;
+# Получаем данные
+response = requests.get(url)
+data = response.json()
 
-  https.get(url, (res) => {
-    let data = '';
-
-    res.on('data', (chunk) => {
-      data += chunk;
-    });
-
-    res.on('end', () => {
-      try {
-        const weatherData = JSON.parse(data);
-        if (weatherData.cod === 200) {
-          displayWeather(weatherData);
-        } else {
-          console.log(`Ошибка: ${weatherData.message}`);
-        }
-      } catch (error) {
-        console.log('Ошибка при обработке данных:', error);
-      }
-    });
-  }).on('error', (err) => {
-    console.log('Ошибка запроса:', err);
-  });
-}
-
-function displayWeather(data) {
-  console.log('=== ПОГОДА ===');
-  console.log(`Город: ${data.name}, ${data.sys.country}`);
-  console.log(`Температура: ${data.main.temp}°C`);
-  console.log(`Ощущается как: ${data.main.feels_like}°C`);
-  console.log(`Описание: ${data.weather[0].description}`);
-  console.log(`Влажность: ${data.main.humidity}%`);
-  console.log(`Давление: ${data.main.pressure} гПа`);
-  console.log(`Скорость ветра: ${data.wind.speed} м/с`);
-  if (data.visibility) {
-    console.log(`Видимость: ${data.visibility / 1000} км`);
-  }
-  console.log('===============');
-}
-
-rl.question('Введите название города: ', (city) => {
-  if (city.trim()) {
-    getWeather(city);
-  } else {
-    console.log('Город не указан.');
-  }
-  rl.close();
-});
+# Выводим температуру (пример)
+print(f"Температура в {city}: {data['main']['temp']} °C")
